@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSQI Calculator | Material You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Google+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Material You (M3) Color Tokens - Theme: "Deep Teal & Lavender" */
+            --md-sys-color-primary: #006a6a;
+            --md-sys-color-on-primary: #ffffff;
+            --md-sys-color-primary-container: #6ff7f6;
+            --md-sys-color-on-primary-container: #002020;
+            
+            --md-sys-color-secondary: #4a6363;
+            --md-sys-color-on-secondary: #ffffff;
+            --md-sys-color-secondary-container: #cce8e7;
+            --md-sys-color-on-secondary-container: #051f1f;
+            
+            --md-sys-color-tertiary: #4b607c;
+            --md-sys-color-tertiary-container: #d3e4ff;
+            --md-sys-color-on-tertiary-container: #041c35;
+
+            --md-sys-color-error: #ba1a1a;
+            --md-sys-color-error-container: #ffdad6;
+            --md-sys-color-on-error-container: #410002;
+
+            --md-sys-color-background: #fafdfc;
+            --md-sys-color-surface: #fafdfc;
+            --md-sys-color-surface-variant: #dae5e4;
+            --md-sys-color-on-surface: #191c1c;
+            --md-sys-color-on-surface-variant: #3f4948;
+
+            --radius-l: 24px;
+            --radius-m: 12px;
+            --radius-s: 8px;
+            
+            --elevation-1: 0 1px 3px 1px rgba(0,0,0,0.15), 0 1px 2px 0 rgba(0,0,0,0.3);
+            --elevation-2: 0 2px 6px 2px rgba(0,0,0,0.15), 0 1px 2px 0 rgba(0,0,0,0.3);
+        }
+
+        body {
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-surface);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 700px;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* --- Header --- */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+        h1 {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 2.5rem;
+            color: var(--md-sys-color-primary);
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: 1rem;
+            margin-top: 8px;
+        }
+
+        /* --- Cards --- */
+        .card {
+            background: #fff;
+            border-radius: var(--radius-l);
+            padding: 24px;
+            margin-bottom: 24px;
+            /* Surface 1 color mix */
+            background-color: #f2f5f4; 
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .section-title {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 1.25rem;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-icon {
+            background: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* --- Inputs (M3 Filled Style) --- */
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--md-sys-color-primary);
+            margin-bottom: 4px;
+            font-weight: 500;
+            margin-left: 16px; /* Align with text inside input */
+        }
+
+        .input-wrapper {
+            position: relative;
+            background-color: var(--md-sys-color-surface-variant);
+            border-radius: var(--radius-m) var(--radius-m) 0 0;
+            transition: background-color 0.2s;
+        }
+        .input-wrapper:hover {
+            background-color: #d0dcdb;
+        }
+
+        input, select {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 16px;
+            font-size: 1rem;
+            color: var(--md-sys-color-on-surface);
+            border-bottom: 2px solid var(--md-sys-color-on-surface-variant);
+            border-radius: var(--radius-m) var(--radius-m) 0 0;
+            box-sizing: border-box;
+            outline: none;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        input:focus, select:focus {
+            border-bottom-color: var(--md-sys-color-primary);
+            background-color: #e6efee;
+        }
+
+        /* Helper text under inputs */
+        .helper {
+            font-size: 0.75rem;
+            color: var(--md-sys-color-on-surface-variant);
+            margin-top: 4px;
+            margin-left: 16px;
+        }
+
+        /* --- FAB / Button --- */
+        .calculate-btn {
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            font-family: 'Google Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border: none;
+            padding: 18px 32px;
+            border-radius: 100px; /* Pill shape */
+            width: 100%;
+            cursor: pointer;
+            box-shadow: var(--elevation-1);
+            transition: transform 0.1s, box-shadow 0.2s, background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .calculate-btn:hover {
+            box-shadow: var(--elevation-2);
+            background-color: #005656; /* Slightly darker */
+        }
+
+        .calculate-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* --- Results Grid --- */
+        #results-section {
+            display: none; /* Hidden initially */
+            margin-top: 40px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .result-card {
+            background: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+            padding: 16px;
+            border-radius: var(--radius-m);
+            text-align: center;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .result-card span {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .result-card strong {
+            font-size: 1.5rem;
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        /* Global Score Large Card */
+        .global-card {
+            grid-column: 1 / -1; /* Span full width */
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            padding: 30px;
+            border-radius: var(--radius-l);
+            text-align: center;
+            margin-top: 10px;
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        .global-label {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .global-value {
+            font-size: 4rem;
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 500;
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .interpretation {
+            background: rgba(255,255,255,0.4);
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes popIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Math Box --- */
+        .math-box {
+            background-color: var(--md-sys-color-surface-variant);
+            color: var(--md-sys-color-on-surface-variant);
+            padding: 16px;
+            border-radius: var(--radius-m);
+            font-family: monospace;
+            margin-top: 10px;
+            border-left: 4px solid var(--md-sys-color-tertiary);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <header>
+        <h1>PSQI Calculator</h1>
+        <div class="subtitle">Material You Edition</div>
+    </header>
+
+    <form id="psqiForm">
+        
+        <div class="card">
+            <div class="section-title"><div class="section-icon">1</div> Time & Duration</div>
+            
+            <div class="input-group">
+                <label>Q1. Bed Time</label>
+                <div class="input-wrapper">
+                    <input type="time" id="bedTime" required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Q3. Wake Up Time</label>
+                <div class="input-wrapper">
+                    <input type="time" id="wakeTime" required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Q2. Minutes to Fall Asleep</label>
+                <div class="input-wrapper">
+                    <input type="number" id="latencyMins" placeholder="30" min="0">
+                </div>
+                <div class="helper">Enter total minutes (e.g. 15, 60)</div>
+            </div>
+
+            <div class="input-group">
+                <label>Q4. Actual Hours Slept</label>
+                <div class="input-wrapper">
+                    <input type="number" id="sleepDur" step="0.5" placeholder="6.5" min="0" max="24">
+                </div>
+                <div class="helper">Exclude time spent awake in bed</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title"><div class="section-icon">2</div> Factors & Trouble</div>
+
+            <div class="input-group">
+                <label>Q5a. Trouble falling asleep within 30 min</label>
+                <div class="input-wrapper">
+                    <select id="q5a">
+                        <option value="0">Not during past month (0)</option>
+                        <option value="1">Less than once a week (1)</option>
+                        <option value="2">Once or twice a week (2)</option>
+                        <option value="3">3 or more times a week (3)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Q5b-j. Sum of Disturbance Scores</label>
+                <div class="input-wrapper">
+                    <input type="number" id="disturbSum" placeholder="0" min="0" max="27" value="0">
+                </div>
+                <div class="helper">Add up scores (0-3) for pain, bathroom, heat, etc.</div>
+            </div>
+
+            <div class="input-group">
+                <label>Q6. Subjective Sleep Quality</label>
+                <div class="input-wrapper">
+                    <select id="q6">
+                        <option value="0">Very Good (0)</option>
+                        <option value="1">Fairly Good (1)</option>
+                        <option value="2">Fairly Bad (2)</option>
+                        <option value="3">Very Bad (3)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title"><div class="section-icon">3</div> Meds & Dysfunction</div>
+
+            <div class="input-group">
+                <label>Q7. Use of Sleep Medication</label>
+                <div class="input-wrapper">
+                    <select id="q7">
+                        <option value="0">None (0)</option>
+                        <option value="1">< 1/week (1)</option>
+                        <option value="2">1-2/week (2)</option>
+                        <option value="3">3+/week (3)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Q8. Trouble Staying Awake</label>
+                <div class="input-wrapper">
+                    <select id="q8">
+                        <option value="0">None (0)</option>
+                        <option value="1">< 1/week (1)</option>
+                        <option value="2">1-2/week (2)</option>
+                        <option value="3">3+/week (3)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Q9. Problem with Enthusiasm</label>
+                <div class="input-wrapper">
+                    <select id="q9">
+                        <option value="0">No problem (0)</option>
+                        <option value="1">Slight problem (1)</option>
+                        <option value="2">Somewhat of a problem (2)</option>
+                        <option value="3">Big problem (3)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="calculate-btn" onclick="calculatePSQI()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Calculate Score
+        </button>
+
+    </form>
+
+    <div id="results-section">
+        
+        <div class="global-card">
+            <div class="global-label">Global PSQI Score</div>
+            <div class="global-value" id="globalScore">0</div>
+            <div class="interpretation" id="interpretation">Good Sleep Quality</div>
+        </div>
+
+        <h3 style="margin-top: 30px; font-weight: 500; font-size: 1.1rem; color: var(--md-sys-color-primary);">Component Breakdown</h3>
+        <div class="results-grid">
+            <div class="result-card" style="animation-delay: 0.1s">
+                <span>Quality</span>
+                <strong id="c1">0</strong>
+            </div>
+            <div class="result-card" style="animation-delay: 0.2s">
+                <span>Latency</span>
+                <strong id="c2">0</strong>
+            </div>
+            <div class="result-card" style="animation-delay: 0.3s">
+                <span>Duration</span>
+                <strong id="c3">0</strong>
+            </div>
+            <div class="result-card" style="animation-delay: 0.4s">
+                <span>Efficiency</span>
+                <strong id="c4">0</strong>
+            </div>
+            <div class="result-card" style="animation-delay: 0.5s">
+                <span>Disturb</span>
+                <strong id="c5">0</strong>
+            </div>
+            <div class="result-card" style="animation-delay: 0.6s">
+                <span>Meds</span>
+                <strong id="c6">0</strong>
+            </div>
+            <div class="result-card" style="animation-delay: 0.7s">
+                <span>Dysfunc</span>
+                <strong id="c7">0</strong>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; opacity: 0.8; font-size: 0.9rem;">
+            <strong>Behind the scenes:</strong>
+            <div class="math-box" id="debug-text">
+                Waiting for calculation...
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function calculatePSQI() {
+        const bedTimeStr = document.getElementById('bedTime').value;
+        const wakeTimeStr = document.getElementById('wakeTime').value;
+        
+        if(!bedTimeStr || !wakeTimeStr) {
+            alert("Please enter Bed Time and Wake Time");
+            return;
+        }
+
+        const latencyMins = parseFloat(document.getElementById('latencyMins').value) || 0;
+        const sleepDur = parseFloat(document.getElementById('sleepDur').value) || 0;
+        const q5a = parseInt(document.getElementById('q5a').value);
+        const distSumRaw = parseInt(document.getElementById('disturbSum').value) || 0;
+        const q6 = parseInt(document.getElementById('q6').value);
+        const q7 = parseInt(document.getElementById('q7').value);
+        const q8 = parseInt(document.getElementById('q8').value);
+        const q9 = parseInt(document.getElementById('q9').value);
+
+        // Time conversion
+        function timeToDec(timeStr) {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours + (minutes / 60);
+        }
+
+        const bedDec = timeToDec(bedTimeStr);
+        const wakeDec = timeToDec(wakeTimeStr);
+
+        // Component 1
+        let c1 = q6;
+
+        // Component 2
+        let q2Score = latencyMins > 60 ? 3 : latencyMins > 30 ? 2 : latencyMins > 15 ? 1 : 0;
+        let latSum = q2Score + q5a;
+        let c2 = latSum === 0 ? 0 : latSum <= 2 ? 1 : latSum <= 4 ? 2 : 3;
+
+        // Component 3
+        let c3 = sleepDur > 7 ? 0 : sleepDur >= 6 ? 1 : sleepDur >= 5 ? 2 : 3;
+
+        // Component 4
+        let hrsInBed = (wakeDec < bedDec) ? (wakeDec + 24) - bedDec : wakeDec - bedDec;
+        let efficiency = hrsInBed > 0 ? (sleepDur / hrsInBed) * 100 : 0;
+        let c4 = efficiency > 85 ? 0 : efficiency >= 75 ? 1 : efficiency >= 65 ? 2 : 3;
+
+        // Component 5
+        let c5 = distSumRaw === 0 ? 0 : distSumRaw <= 9 ? 1 : distSumRaw <= 18 ? 2 : 3;
+
+        // Component 6
+        let c6 = q7;
+
+        // Component 7
+        let daySum = q8 + q9;
+        let c7 = daySum === 0 ? 0 : daySum <= 2 ? 1 : daySum <= 4 ? 2 : 3;
+
+        // Global
+        let global = c1 + c2 + c3 + c4 + c5 + c6 + c7;
+
+        // Update UI
+        document.getElementById('c1').innerText = c1;
+        document.getElementById('c2').innerText = c2;
+        document.getElementById('c3').innerText = c3;
+        document.getElementById('c4').innerText = c4;
+        document.getElementById('c5').innerText = c5;
+        document.getElementById('c6').innerText = c6;
+        document.getElementById('c7').innerText = c7;
+        
+        const globalEl = document.getElementById('globalScore');
+        globalEl.innerText = global;
+
+        // Interpretation Style
+        const interpEl = document.getElementById('interpretation');
+        const globalCard = document.querySelector('.global-card');
+        
+        if(global >= 5) {
+            interpEl.innerText = "POOR Sleep Quality (≥5)";
+            // Switch to Error/Alert colors
+            globalCard.style.backgroundColor = "var(--md-sys-color-error-container)";
+            globalCard.style.color = "var(--md-sys-color-on-error-container)";
+        } else {
+            interpEl.innerText = "GOOD Sleep Quality (<5)";
+            // Switch to Success/Primary colors
+            globalCard.style.backgroundColor = "var(--md-sys-color-primary-container)";
+            globalCard.style.color = "var(--md-sys-color-on-primary-container)";
+        }
+
+        // Debug Text
+        document.getElementById('debug-text').innerHTML = 
+            `Bed Time (${bedTimeStr}) → Dec: ${bedDec.toFixed(2)}<br>` +
+            `Wake Time (${wakeTimeStr}) → Dec: ${wakeDec.toFixed(2)}<br>` +
+            `Hrs in Bed: ${hrsInBed.toFixed(2)} hrs<br>` +
+            `Efficiency: ${efficiency.toFixed(1)}%`;
+
+        // Reveal Animation (Reset if already open)
+        const resultsSection = document.getElementById('results-section');
+        resultsSection.style.display = 'none';
+        resultsSection.offsetHeight; // trigger reflow
+        resultsSection.style.display = 'block';
+        
+        // Scroll to results
+        resultsSection.scrollIntoView({behavior: "smooth"});
+    }
+</script>
+
+</body>
+</html>

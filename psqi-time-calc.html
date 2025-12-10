@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSQI Calculator & Simulator</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --light: #ecf0f1;
+            --success: #27ae60;
+            --warning: #e67e22;
+            --danger: #c0392b;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 { margin-top: 0; }
+        
+        /* Calculator Section */
+        .calculator-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+        .form-group:last-child { border-bottom: none; }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        .helper-text {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        select, input[type="number"], input[type="time"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box; 
+        }
+        input[type="time"] {
+            font-family: monospace;
+        }
+
+        /* Results Box */
+        #results-area {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            display: none; /* Hidden by default */
+        }
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .score-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 4px;
+        }
+        .score-item span {
+            display: block;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        .score-item strong {
+            font-size: 1.2rem;
+        }
+        .final-score {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        .btn:hover { background: #2980b9; }
+
+        /* Explanation Section */
+        .explanation {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 5px solid var(--warning);
+        }
+        code {
+            background: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: #c0392b;
+        }
+        .math-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 3px solid #333;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>PSQI Calculator Simulator</h1>
+        <p>Pittsburgh Sleep Quality Index Scoring Tool</p>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="calculator-card">
+        <h2>Enter Patient Data</h2>
+        <p class="helper-text">This simulator converts inputs into the 7 components automatically.</p>
+        
+        <form id="psqiForm">
+            <div class="form-group">
+                <label>Q1. Bed Time</label>
+                <input type="time" id="bedTime" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Q2. Minutes to Fall Asleep (Latency)</label>
+                <input type="number" id="latencyMins" placeholder="e.g., 30" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label>Q3. Wake Up Time</label>
+                <input type="time" id="wakeTime" required>
+            </div>
+
+            <div class="form-group">
+                <label>Q4. Actual Hours of Sleep</label>
+                <span class="helper-text">How many hours of actual sleep did you get? (Must be less than time in bed)</span>
+                <input type="number" id="sleepDur" step="0.5" placeholder="e.g., 6.5" min="0" max="24" required>
+            </div>
+
+            <div class="form-group">
+                <label>Q5a. Trouble sleeping because you cannot get to sleep within 30 minutes</label>
+                <select id="q5a">
+                    <option value="0">Not during the past month (0)</option>
+                    <option value="1">Less than once a week (1)</option>
+                    <option value="2">Once or twice a week (2)</option>
+                    <option value="3">Three or more times a week (3)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Q5b - Q5j. Sum of ALL other sleep disturbances</label>
+                <span class="helper-text">Sum the scores (0-3) for waking up, bathroom, breathing, coughing, cold, hot, dreams, pain, etc. (Range 0-27)</span>
+                <input type="number" id="disturbSum" placeholder="Total score for Q5b-j" min="0" max="27" value="0">
+            </div>
+
+            <div class="form-group">
+                <label>Q6. Subjective Sleep Quality</label>
+                <select id="q6">
+                    <option value="0">Very Good (0)</option>
+                    <option value="1">Fairly Good (1)</option>
+                    <option value="2">Fairly Bad (2)</option>
+                    <option value="3">Very Bad (3)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Q7. Use of Sleep Medication</label>
+                <select id="q7">
+                    <option value="0">Not during the past month (0)</option>
+                    <option value="1">Less than once a week (1)</option>
+                    <option value="2">Once or twice a week (2)</option>
+                    <option value="3">Three or more times a week (3)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Q8. Trouble staying awake while driving, eating, or social activity</label>
+                <select id="q8">
+                    <option value="0">Not during the past month (0)</option>
+                    <option value="1">Less than once a week (1)</option>
+                    <option value="2">Once or twice a week (2)</option>
+                    <option value="3">Three or more times a week (3)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Q9. Problem keeping up enough enthusiasm to get things done</label>
+                <select id="q9">
+                    <option value="0">No problem at all (0)</option>
+                    <option value="1">Only a very slight problem (1)</option>
+                    <option value="2">Somewhat of a problem (2)</option>
+                    <option value="3">A very big problem (3)</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn" onclick="calculatePSQI()">Calculate Score</button>
+        </form>
+
+        <div id="results-area">
+            <h3>Results</h3>
+            <div class="score-grid">
+                <div class="score-item">
+                    <span>Component 1</span>
+                    <strong>Quality: <span id="c1">0</span></strong>
+                </div>
+                <div class="score-item">
+                    <span>Component 2</span>
+                    <strong>Latency: <span id="c2">0</span></strong>
+                </div>
+                <div class="score-item">
+                    <span>Component 3</span>
+                    <strong>Duration: <span id="c3">0</span></strong>
+                </div>
+                <div class="score-item">
+                    <span>Component 4</span>
+                    <strong>Efficiency: <span id="c4">0</span></strong>
+                </div>
+                <div class="score-item">
+                    <span>Component 5</span>
+                    <strong>Disturbance: <span id="c5">0</span></strong>
+                </div>
+                <div class="score-item">
+                    <span>Component 6</span>
+                    <strong>Meds: <span id="c6">0</span></strong>
+                </div>
+                <div class="score-item">
+                    <span>Component 7</span>
+                    <strong>Dysfunction: <span id="c7">0</span></strong>
+                </div>
+            </div>
+            <div class="final-score">
+                Global PSQI: <span id="globalScore">0</span>
+            </div>
+            <div style="text-align: center; margin-top:10px; font-size: 0.9rem;">
+                <span id="interpretation"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="explanation">
+        <h2>How the Logic Works</h2>
+        <p>This calculator mimics the backend logic of the SPSS/R script provided. Here are the key technical details:</p>
+        
+        <h3>1. The Time Conversion (The "23.5" Rule)</h3>
+        <p>When you select a time in the simulator (e.g., 11:30 PM), the JavaScript converts it to a decimal automatically so the math works.</p>
+        <div class="math-box">
+            Input: 11:30 PM<br>
+            24h Format: 23:30<br>
+            Decimal Math: 23 + (30/60) = <strong>23.5</strong>
+        </div>
+        <p>This allows the script to calculate <strong>Sleep Efficiency (Component 4)</strong> by simple subtraction.</p>
+
+        <h3>2. Sleep Efficiency Formula</h3>
+        <p>The hardest component to calculate manually is Efficiency. The logic follows:</p>
+        <div class="math-box">
+            Hrs in Bed = (Wake Decimal - Bed Decimal)<br>
+            <em>(If result is negative, add 24 hours to handle midnight crossing)</em><br><br>
+            Efficiency % = (Actual Sleep / Hrs in Bed) * 100
+        </div>
+        
+        <h3>3. Scoring Breakdown</h3>
+        <ul>
+            <li><strong>Global Score Range:</strong> 0 to 21</li>
+            <li><strong>Cutoff:</strong> A score of <strong>5 or greater</strong> indicates "Poor" sleep quality.</li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    function calculatePSQI() {
+        // --- 1. Get Values ---
+        const bedTimeStr = document.getElementById('bedTime').value;
+        const wakeTimeStr = document.getElementById('wakeTime').value;
+        const latencyMins = parseFloat(document.getElementById('latencyMins').value) || 0;
+        const sleepDur = parseFloat(document.getElementById('sleepDur').value) || 0;
+        
+        const q5a = parseInt(document.getElementById('q5a').value);
+        const distSumRaw = parseInt(document.getElementById('disturbSum').value) || 0;
+        const q6 = parseInt(document.getElementById('q6').value);
+        const q7 = parseInt(document.getElementById('q7').value);
+        const q8 = parseInt(document.getElementById('q8').value);
+        const q9 = parseInt(document.getElementById('q9').value);
+
+        // --- 2. Helper: Time to Decimal ---
+        // Converts "23:30" to 23.5
+        function timeToDec(timeStr) {
+            if(!timeStr) return 0;
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours + (minutes / 60);
+        }
+
+        const bedDec = timeToDec(bedTimeStr);
+        const wakeDec = timeToDec(wakeTimeStr);
+
+        // --- 3. Component Calculations ---
+
+        // Component 1: Subjective Quality
+        let c1 = q6;
+
+        // Component 2: Latency
+        // Score Q2 (mins) -> 0-3
+        let q2Score = 0;
+        if (latencyMins > 60) q2Score = 3;
+        else if (latencyMins > 30) q2Score = 2;
+        else if (latencyMins > 15) q2Score = 1;
+        else q2Score = 0;
+
+        let latSum = q2Score + q5a;
+        let c2 = 0;
+        if (latSum === 0) c2 = 0;
+        else if (latSum <= 2) c2 = 1;
+        else if (latSum <= 4) c2 = 2;
+        else c2 = 3;
+
+        // Component 3: Duration
+        let c3 = 0;
+        if (sleepDur > 7) c3 = 0;
+        else if (sleepDur >= 6) c3 = 1;
+        else if (sleepDur >= 5) c3 = 2;
+        else c3 = 3;
+
+        // Component 4: Efficiency
+        // Calc hours in bed
+        let hrsInBed = 0;
+        if (wakeDec < bedDec) {
+            hrsInBed = (wakeDec + 24) - bedDec;
+        } else {
+            hrsInBed = wakeDec - bedDec;
+        }
+
+        // Prevent division by zero
+        let efficiency = 0;
+        if (hrsInBed > 0) {
+            efficiency = (sleepDur / hrsInBed) * 100;
+        }
+
+        let c4 = 0;
+        if (efficiency > 85) c4 = 0;
+        else if (efficiency >= 75) c4 = 1;
+        else if (efficiency >= 65) c4 = 2;
+        else c4 = 3;
+
+        // Component 5: Disturbance
+        // In this sim, we took the sum directly.
+        // Logic: 0=0, 1-9=1, 10-18=2, >18=3
+        let c5 = 0;
+        if (distSumRaw === 0) c5 = 0;
+        else if (distSumRaw <= 9) c5 = 1;
+        else if (distSumRaw <= 18) c5 = 2;
+        else c5 = 3;
+
+        // Component 6: Meds
+        let c6 = q7;
+
+        // Component 7: Daytime Dysfunction
+        let daySum = q8 + q9;
+        let c7 = 0;
+        if (daySum === 0) c7 = 0;
+        else if (daySum <= 2) c7 = 1;
+        else if (daySum <= 4) c7 = 2;
+        else c7 = 3;
+
+        // --- 4. Global Score ---
+        let global = c1 + c2 + c3 + c4 + c5 + c6 + c7;
+
+        // --- 5. Render ---
+        document.getElementById('c1').innerText = c1;
+        document.getElementById('c2').innerText = c2;
+        document.getElementById('c3').innerText = c3;
+        document.getElementById('c4').innerText = c4 + ` (${Math.round(efficiency)}%)`;
+        document.getElementById('c5').innerText = c5;
+        document.getElementById('c6').innerText = c6;
+        document.getElementById('c7').innerText = c7;
+        document.getElementById('globalScore').innerText = global;
+
+        const interpretation = document.getElementById('interpretation');
+        if(global >= 5) {
+            interpretation.innerText = "Interpretation: POOR Sleep Quality (Score ≥ 5)";
+            interpretation.style.color = "#ffcccc";
+        } else {
+            interpretation.innerText = "Interpretation: GOOD Sleep Quality (Score < 5)";
+            interpretation.style.color = "#ccffcc";
+        }
+
+        document.getElementById('results-area').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>

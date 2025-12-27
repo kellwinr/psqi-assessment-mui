@@ -5,7 +5,7 @@
 
 A standalone, single-file clinical tool for scoring the **Pittsburgh Sleep Quality Index (PSQI)**. 
 
-Designed with **Material Design 3 (Material You)** principles, this tool provides a beautiful, responsive, and animated interface for calculating sleep quality scores without needing Excel or SPSS.
+Designed with **Material Design** principles, this tool provides a beautiful, responsive, and animated interface for calculating sleep quality scores without needing Excel or SPSS.
 
 ## ✨ Key Features
 

@@ -1,28 +1,33 @@
 # PSQI Calculator
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-A standalone, single-file clinical tool for scoring the **Pittsburgh Sleep Quality Index (PSQI)**. 
+A standalone, single-file clinical tool for scoring the **Pittsburgh Sleep Quality Index (PSQI)**.
 
-Designed with **Material Design** principles, this tool provides a beautiful, responsive, and animated interface for calculating sleep quality scores without needing Excel or SPSS.
+Completely redesigned with a **Modern Glassmorphism** aesthetic, this tool provides a visually stunning, responsive, and animated interface for calculating sleep quality scores without needing Excel or SPSS.
 
 ## ✨ Key Features
 
-* **⚡️ Single File Architecture:** No servers, no installation, and no internet required. Just one `.html` file.
-* **🎨 Material You UI:** Features modern rounded aesthetics, "Surface" color roles, and smooth entry animations.
-* **🖨️ Clinical Print Mode:** Press `Ctrl + P` to generate a clean, black-and-white medical report (automatically hides buttons and styling artifacts).
-* **🧠 Smart Validation:** Prevents impossible inputs (e.g., >24 hours of sleep).
+* **⚡️ Single File Architecture:** No servers, no installation, and no internet required. Just one `.html` file containing all HTML, CSS, and JS.
+* **💎 Glassmorphism UI:** Features frosted glass effects, dynamic background animations, and sleek transparency for a premium feel.
+* **🎨 Dynamic Visuals:** Includes animated floating background orbs and smooth, staggered entry animations for results.
+* **🖨️ Clinical Print Mode:** Press `Ctrl + P` to generate a clean, ink-saving black-and-white medical report (automatically strips glass effects and background colors).
+* **🧠 Smart Validation:** Prevents impossible inputs (e.g., >24 hours of sleep) and validates time fields.
 * **🔢 Auto-Scoring:** Instantly calculates all 7 components and the Global Score based on the official Buysse et al. (1989) algorithms.
 
 ## 🚀 Quick Start
 
-1.  Download or save the file `psqi_final.html`.
+1.  Download or save the file `psqi_glass.html`.
 2.  **Double-click** the file to open it in any modern web browser (Chrome, Edge, Firefox, Safari).
 3.  Enter the patient's data.
 4.  Click **Calculate Score**.
 
 ## 🧩 Technical Details
+
+### The "Glass" Effect
+The interface uses modern CSS properties like `backdrop-filter: blur()` and semi-transparent RGBA backgrounds to create the frosted glass look, while ensuring text remains readable through high contrast ratios.
 
 ### The "Decimal Time" Logic
 The calculator handles the complex logic of converting "Clock Time" to "Decimal Time" automatically to calculate sleep efficiency accurately.

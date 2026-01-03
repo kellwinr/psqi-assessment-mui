@@ -6,7 +6,7 @@
 
 A standalone, single-file clinical tool for scoring the **Pittsburgh Sleep Quality Index (PSQI)**.
 
-Completely redesigned with a **Modern Glassmorphism** aesthetic, this tool provides a visually stunning, responsive, and animated interface for calculating sleep quality scores without needing Excel or SPSS.
+Completely redesigned with a **Modern** user interface, this tool provides a visually responsive, and animated interface for calculating sleep quality scores without needing Excel or SPSS.
 
 ## ✨ Key Features
 

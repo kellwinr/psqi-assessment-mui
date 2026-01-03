@@ -3,309 +3,393 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSQI Calculator | Professional</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Google+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <title>PSQI Calculator | Glassmorphism UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Material You (M3) Color Tokens */
-            --md-sys-color-primary: #006a6a;
-            --md-sys-color-on-primary: #ffffff;
-            --md-sys-color-primary-container: #6ff7f6;
-            --md-sys-color-on-primary-container: #002020;
+            /* Glassmorphism Tokens */
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --blur-strength: 12px;
             
-            --md-sys-color-secondary: #4a6363;
-            --md-sys-color-on-secondary: #ffffff;
-            --md-sys-color-secondary-container: #cce8e7;
-            --md-sys-color-on-secondary-container: #051f1f;
+            /* Colors */
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --accent: #06b6d4;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
             
-            --md-sys-color-tertiary: #4b607c;
-            
-            --md-sys-color-error: #ba1a1a;
-            --md-sys-color-error-container: #ffdad6;
-            --md-sys-color-on-error-container: #410002;
-
-            --md-sys-color-background: #fafdfc;
-            --md-sys-color-surface-variant: #dae5e4;
-            --md-sys-color-on-surface: #191c1c;
-            --md-sys-color-on-surface-variant: #3f4948;
-
-            --radius-l: 24px;
-            --radius-m: 12px;
-            
-            --elevation-1: 0 1px 3px 1px rgba(0,0,0,0.15), 0 1px 2px 0 rgba(0,0,0,0.3);
-            --elevation-2: 0 2px 6px 2px rgba(0,0,0,0.15), 0 1px 2px 0 rgba(0,0,0,0.3);
+            /* Spacing */
+            --radius-xl: 24px;
+            --radius-l: 16px;
         }
 
         body {
-            background-color: var(--md-sys-color-background);
-            color: var(--md-sys-color-on-surface);
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
+            color: var(--text-main);
+            /* Animated Mesh Gradient Background */
+            background: linear-gradient(45deg, #e0f2fe, #f0f9ff, #eef2ff);
+            background-size: 400% 400%;
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
-            min-height: 100vh;
+            position: relative;
+        }
+
+        /* --- Ambient Background Animations --- */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            animation: float 10s infinite ease-in-out;
+        }
+        .orb-1 {
+            width: 400px; height: 400px;
+            background: rgba(37, 99, 235, 0.2);
+            top: -50px; left: -100px;
+        }
+        .orb-2 {
+            width: 300px; height: 300px;
+            background: rgba(6, 182, 212, 0.2);
+            bottom: 10%; right: -50px;
+            animation-delay: -2s;
+        }
+        .orb-3 {
+            width: 200px; height: 200px;
+            background: rgba(139, 92, 246, 0.15);
+            top: 40%; left: 60%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(0, 20px); }
+            100% { transform: translate(0, 0); }
         }
 
         .app-container {
             width: 100%;
-            max-width: 700px;
-            padding: 20px;
-            box-sizing: border-box;
-            animation: fadeIn 0.8s ease-out;
+            max-width: 750px;
+            padding: 40px 20px;
+            z-index: 1;
         }
 
         /* --- Header --- */
         header {
             text-align: center;
-            margin-bottom: 40px;
-            padding-top: 20px;
+            margin-bottom: 50px;
+            animation: slideDown 0.8s ease-out;
         }
         h1 {
-            font-family: 'Google Sans', sans-serif;
-            font-size: 2.5rem;
-            color: var(--md-sys-color-primary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin: 0;
-            letter-spacing: -0.5px;
+            letter-spacing: -1px;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
         .subtitle {
-            color: var(--md-sys-color-on-surface-variant);
-            font-size: 1rem;
-            margin-top: 8px;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: 10px;
+            font-weight: 400;
         }
 
-        /* --- Cards --- */
+        /* --- Glass Cards --- */
         .card {
-            background: #fff;
-            border-radius: var(--radius-l);
-            padding: 24px;
-            margin-bottom: 24px;
-            background-color: #f2f5f4; 
-            transition: transform 0.2s;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-strength));
+            -webkit-backdrop-filter: blur(var(--blur-strength));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px 0 rgba(31, 38, 135, 0.2);
+            background: rgba(255, 255, 255, 0.75);
+        }
+
         .section-title {
-            font-family: 'Google Sans', sans-serif;
-            font-size: 1.25rem;
-            color: var(--md-sys-color-on-surface);
-            margin-bottom: 16px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
+
         .section-icon {
-            background: var(--md-sys-color-secondary-container);
-            color: var(--md-sys-color-on-secondary-container);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: 700;
             font-size: 0.9rem;
-            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
         }
 
         /* --- Inputs --- */
-        .input-group { margin-bottom: 20px; }
+        .input-group { margin-bottom: 24px; position: relative; }
         
         label {
             display: block;
-            font-size: 0.75rem;
-            color: var(--md-sys-color-primary);
-            margin-bottom: 4px;
-            font-weight: 500;
-            margin-left: 16px; 
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+            margin-left: 4px;
         }
 
         .input-wrapper {
-            background-color: var(--md-sys-color-surface-variant);
-            border-radius: var(--radius-m) var(--radius-m) 0 0;
-            transition: background-color 0.2s;
+            position: relative;
         }
-        .input-wrapper:hover { background-color: #d0dcdb; }
 
         input, select {
             width: 100%;
-            border: none;
-            background: transparent;
-            padding: 16px;
+            border: 2px solid transparent;
+            background: rgba(255,255,255,0.5);
+            padding: 16px 20px;
             font-size: 1rem;
-            color: var(--md-sys-color-on-surface);
-            border-bottom: 2px solid var(--md-sys-color-on-surface-variant);
-            border-radius: var(--radius-m) var(--radius-m) 0 0;
+            color: var(--text-main);
+            border-radius: var(--radius-l);
             box-sizing: border-box;
             outline: none;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        input:hover, select:hover {
+            background: rgba(255,255,255,0.8);
         }
 
         input:focus, select:focus {
-            border-bottom-color: var(--md-sys-color-primary);
-            background-color: #e6efee;
+            background: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
         }
+
         .helper {
             font-size: 0.75rem;
-            color: var(--md-sys-color-on-surface-variant);
-            margin-top: 4px;
-            margin-left: 16px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            margin-left: 4px;
         }
 
         /* --- Buttons --- */
         .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
         }
 
         .calculate-btn {
-            background-color: var(--md-sys-color-primary);
-            color: var(--md-sys-color-on-primary);
-            font-family: 'Google Sans', sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-family: 'Poppins', sans-serif;
             font-size: 1.1rem;
-            font-weight: 500;
+            font-weight: 600;
             border: none;
-            padding: 18px 32px;
+            padding: 20px;
             border-radius: 100px;
             cursor: pointer;
-            box-shadow: var(--elevation-1);
-            transition: all 0.2s;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-        }
-        .calculate-btn:hover {
-            box-shadow: var(--elevation-2);
-            background-color: #005656;
+            gap: 12px;
         }
 
+        .calculate-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4);
+        }
+        
+        .calculate-btn:active { transform: scale(0.98); }
+
         .reset-btn {
-            background-color: transparent;
-            color: var(--md-sys-color-on-surface-variant);
-            border: 1px solid var(--md-sys-color-on-surface-variant);
-            font-family: 'Google Sans', sans-serif;
-            font-weight: 500;
-            padding: 14px;
+            background: rgba(255,255,255,0.5);
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
             border-radius: 100px;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .reset-btn:hover { background-color: rgba(0,0,0,0.05); }
-
-        /* --- Results --- */
-        #results-section {
-            display: none; 
-            margin-top: 40px;
-            padding-bottom: 50px;
+        .reset-btn:hover { 
+            background: white; 
+            color: var(--danger);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
+
+        /* --- Results Section --- */
+        #results-section {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .global-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius-xl);
+            text-align: center;
+            border: 1px solid white;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            animation: popUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Animated glow behind global score */
+        .global-card::before {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: var(--primary);
+            filter: blur(60px);
+            opacity: 0.2;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+        }
+
+        .global-label {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .global-value {
+            font-size: 5rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            line-height: 1;
+            margin: 15px 0;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(180deg, var(--text-main), var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .interpretation {
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .status-good { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .status-bad { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
 
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 12px;
+            margin-top: 30px;
         }
 
         .result-card {
-            background: var(--md-sys-color-secondary-container);
-            color: var(--md-sys-color-on-secondary-container);
-            padding: 16px;
-            border-radius: var(--radius-m);
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255,255,255,0.6);
+            padding: 15px 10px;
+            border-radius: var(--radius-l);
             text-align: center;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             opacity: 0;
-            transform: scale(0.8);
+            animation: fadeSlideUp 0.5s ease forwards;
         }
 
         .result-card span {
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            opacity: 0.7;
-            margin-bottom: 4px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
         }
 
         .result-card strong {
-            font-size: 1.5rem;
-            font-family: 'Google Sans', sans-serif;
-        }
-
-        .global-card {
-            grid-column: 1 / -1;
-            background: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
-            padding: 30px;
-            border-radius: var(--radius-l);
-            text-align: center;
-            margin-top: 10px;
-            animation: slideUp 0.6s ease-out forwards;
-        }
-
-        .global-value {
-            font-size: 4rem;
-            font-family: 'Google Sans', sans-serif;
-            font-weight: 500;
-            line-height: 1;
-            margin: 10px 0;
-        }
-
-        .interpretation {
-            background: rgba(255,255,255,0.4);
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 1.4rem;
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary);
         }
 
         .math-box {
-            background-color: var(--md-sys-color-surface-variant);
-            color: var(--md-sys-color-on-surface-variant);
-            padding: 16px;
-            border-radius: var(--radius-m);
+            background: rgba(0,0,0,0.03);
+            border-left: 3px solid var(--text-muted);
+            padding: 15px;
+            border-radius: 8px;
             font-family: monospace;
-            margin-top: 10px;
-            border-left: 4px solid var(--md-sys-color-tertiary);
+            margin-top: 20px;
             font-size: 0.85rem;
+            color: var(--text-muted);
         }
 
         /* --- Animations --- */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes popIn { to { opacity: 1; transform: scale(1); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popUp { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- PRINT STYLES (Clean PDF Report) --- */
-        @media print {
-            body { background: white; color: black; }
-            .app-container { max-width: 100%; box-shadow: none; padding: 0; }
-            header { margin-bottom: 20px; padding-top: 0; }
-            .card, .global-card, .result-card { 
-                border: 1px solid #ccc; 
-                box-shadow: none !important; 
-                background: white !important;
-                color: black !important;
-                page-break-inside: avoid;
-            }
-            .btn-group { display: none !important; }
-            #results-section { display: block !important; }
-            .input-wrapper { background: none; border: none; padding: 0; }
-            input, select { border: none; font-weight: bold; padding: 0; }
-            label { color: #666; font-size: 0.8rem; margin: 0; }
-            .helper { display: none; }
-            
-            /* Force Grid layout in print */
-            .results-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; }
-            .global-card { background: #eee !important; }
+        /* --- Responsive --- */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .btn-group { grid-template-columns: 1fr; }
+            .card { padding: 20px; }
+            .results-grid { grid-template-columns: repeat(3, 1fr); }
         }
 
+        @media print {
+            body { background: white; }
+            .orb { display: none; }
+            .card, .global-card { box-shadow: none; border: 1px solid #ddd; backdrop-filter: none; background: white; }
+            .calculate-btn, .reset-btn { display: none; }
+            #results-section { display: block !important; }
+        }
     </style>
 </head>
 <body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
 
 <div class="app-container">
 
     <header>
         <h1>PSQI Calculator</h1>
-        <div class="subtitle">Clinical Scoring Tool</div>
+        <div class="subtitle">Pittsburgh Sleep Quality Index</div>
     </header>
 
     <form id="psqiForm">
@@ -330,17 +414,17 @@
             <div class="input-group">
                 <label>Q2. Minutes to Fall Asleep</label>
                 <div class="input-wrapper">
-                    <input type="number" id="latencyMins" placeholder="30" min="0">
+                    <input type="number" id="latencyMins" placeholder="e.g. 20" min="0">
                 </div>
-                <div class="helper">Enter total minutes (e.g. 15, 60)</div>
+                <div class="helper">Enter total minutes (latency)</div>
             </div>
 
             <div class="input-group">
                 <label>Q4. Actual Hours Slept</label>
                 <div class="input-wrapper">
-                    <input type="number" id="sleepDur" step="0.5" placeholder="6.5" min="0" max="24">
+                    <input type="number" id="sleepDur" step="0.5" placeholder="e.g. 6.5" min="0" max="24">
                 </div>
-                <div class="helper">Exclude time spent awake in bed</div>
+                <div class="helper">Do not include time spent awake in bed</div>
             </div>
         </div>
 
@@ -364,7 +448,7 @@
                 <div class="input-wrapper">
                     <input type="number" id="disturbSum" placeholder="0" min="0" max="27" value="0">
                 </div>
-                <div class="helper">Add up scores (0-3) for pain, bathroom, heat, etc.</div>
+                <div class="helper">Sum of items 5b through 5j (0-3 scale each)</div>
             </div>
 
             <div class="input-group">
@@ -422,11 +506,11 @@
 
         <div class="btn-group">
             <button type="button" class="calculate-btn" onclick="calculatePSQI()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 Calculate Score
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
             <button type="button" class="reset-btn" onclick="resetForm()">
-                Reset Form
+                Reset
             </button>
         </div>
 
@@ -440,42 +524,42 @@
             <div class="interpretation" id="interpretation">Good Sleep Quality</div>
         </div>
 
-        <h3 style="margin-top: 30px; font-weight: 500; font-size: 1.1rem; color: var(--md-sys-color-primary);">Component Breakdown</h3>
+        <h3 style="margin-top: 30px; font-family: 'Poppins', sans-serif; font-size: 1.1rem; color: var(--text-main);">Component Breakdown</h3>
         <div class="results-grid">
             <div class="result-card" style="animation-delay: 0.1s">
                 <span>Quality</span>
                 <strong id="c1">0</strong>
             </div>
-            <div class="result-card" style="animation-delay: 0.2s">
+            <div class="result-card" style="animation-delay: 0.15s">
                 <span>Latency</span>
                 <strong id="c2">0</strong>
             </div>
-            <div class="result-card" style="animation-delay: 0.3s">
+            <div class="result-card" style="animation-delay: 0.2s">
                 <span>Duration</span>
                 <strong id="c3">0</strong>
             </div>
-            <div class="result-card" style="animation-delay: 0.4s">
+            <div class="result-card" style="animation-delay: 0.25s">
                 <span>Efficiency</span>
                 <strong id="c4">0</strong>
             </div>
-            <div class="result-card" style="animation-delay: 0.5s">
+            <div class="result-card" style="animation-delay: 0.3s">
                 <span>Disturb</span>
                 <strong id="c5">0</strong>
             </div>
-            <div class="result-card" style="animation-delay: 0.6s">
+            <div class="result-card" style="animation-delay: 0.35s">
                 <span>Meds</span>
                 <strong id="c6">0</strong>
             </div>
-            <div class="result-card" style="animation-delay: 0.7s">
+            <div class="result-card" style="animation-delay: 0.4s">
                 <span>Dysfunc</span>
                 <strong id="c7">0</strong>
             </div>
         </div>
 
-        <div style="margin-top: 40px; opacity: 0.8; font-size: 0.9rem;">
-            <strong>Calculation Details:</strong>
+        <div style="margin-top: 40px; opacity: 0.9;">
+            <strong style="font-size: 0.9rem; color: var(--text-main);">Calculation Log:</strong>
             <div class="math-box" id="debug-text">
-                Waiting for calculation...
+                Waiting for input...
             </div>
         </div>
 
@@ -484,12 +568,12 @@
 </div>
 
 <script>
+    // The core logic remains robust and identical to ensure accuracy.
     function calculatePSQI() {
         const bedTimeStr = document.getElementById('bedTime').value;
         const wakeTimeStr = document.getElementById('wakeTime').value;
         const sleepDur = parseFloat(document.getElementById('sleepDur').value) || 0;
         
-        // --- Validation ---
         if(!bedTimeStr || !wakeTimeStr) {
             alert("Please enter both Bed Time and Wake Time.");
             return;
@@ -507,7 +591,6 @@
         const q8 = parseInt(document.getElementById('q8').value);
         const q9 = parseInt(document.getElementById('q9').value);
 
-        // --- Logic ---
         function timeToDec(timeStr) {
             const [hours, minutes] = timeStr.split(':').map(Number);
             return hours + (minutes / 60);
@@ -529,8 +612,9 @@
 
         // Component 4
         let hrsInBed = (wakeDec < bedDec) ? (wakeDec + 24) - bedDec : wakeDec - bedDec;
+        if(hrsInBed < 0) hrsInBed += 24; 
+        
         let efficiency = hrsInBed > 0 ? (sleepDur / hrsInBed) * 100 : 0;
-        // Fix: Ensure efficiency doesn't exceed 100% (user error on duration)
         if(efficiency > 100) efficiency = 100;
         
         let c4 = efficiency > 85 ? 0 : efficiency >= 75 ? 1 : efficiency >= 65 ? 2 : 3;
@@ -548,7 +632,7 @@
         // Global
         let global = c1 + c2 + c3 + c4 + c5 + c6 + c7;
 
-        // --- Update UI ---
+        // Update UI
         document.getElementById('c1').innerText = c1;
         document.getElementById('c2').innerText = c2;
         document.getElementById('c3').innerText = c3;
@@ -562,31 +646,29 @@
 
         // Style & Interpretation
         const interpEl = document.getElementById('interpretation');
-        const globalCard = document.querySelector('.global-card');
         
+        interpEl.className = 'interpretation'; // Reset classes
         if(global >= 5) {
-            interpEl.innerText = "POOR Sleep Quality (≥5)";
-            globalCard.style.backgroundColor = "var(--md-sys-color-error-container)";
-            globalCard.style.color = "var(--md-sys-color-on-error-container)";
+            interpEl.innerText = "Poor Sleep Quality (≥5)";
+            interpEl.classList.add('status-bad');
         } else {
-            interpEl.innerText = "GOOD Sleep Quality (<5)";
-            globalCard.style.backgroundColor = "var(--md-sys-color-primary-container)";
-            globalCard.style.color = "var(--md-sys-color-on-primary-container)";
+            interpEl.innerText = "Good Sleep Quality (<5)";
+            interpEl.classList.add('status-good');
         }
 
         // Debug Text
         document.getElementById('debug-text').innerHTML = 
             `Bed Time: ${bedTimeStr} | Wake Time: ${wakeTimeStr}<br>` +
-            `Hours in Bed: ${hrsInBed.toFixed(2)} | Sleep Duration: ${sleepDur}<br>` +
-            `Sleep Efficiency: ${efficiency.toFixed(1)}%`;
+            `Time in Bed: ${hrsInBed.toFixed(2)}h | Sleep Duration: ${sleepDur}h<br>` +
+            `Efficiency: ${efficiency.toFixed(1)}%`;
 
-        // Reveal
+        // Reveal with smooth scroll
         const resultsSection = document.getElementById('results-section');
         resultsSection.style.display = 'none';
-        resultsSection.offsetHeight; 
+        resultsSection.offsetHeight; // trigger reflow
         resultsSection.style.display = 'block';
         
-        resultsSection.scrollIntoView({behavior: "smooth"});
+        resultsSection.scrollIntoView({behavior: "smooth", block: "start"});
     }
 
     function resetForm() {

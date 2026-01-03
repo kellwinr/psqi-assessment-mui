@@ -19,7 +19,7 @@ Completely redesigned with a **Modern Glassmorphism** aesthetic, this tool provi
 
 ## 🚀 Quick Start
 
-1.  Download or save the file `psqi_glass.html`.
+1.  Download or save the file `index.html` or https://kellwinr.github.io/psqi-assessment-mui/.
 2.  **Double-click** the file to open it in any modern web browser (Chrome, Edge, Firefox, Safari).
 3.  Enter the patient's data.
 4.  Click **Calculate Score**.
